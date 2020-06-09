@@ -5,4 +5,8 @@ This can be found here: [pokemon.json](https://github.com/fanzeyi/pokemon.json)
 
 ---------
 
-Currently work in progress, need to work on the GUI aspect of the program.
+Currently work in progress\
+Things that need doing: 
+- GUI
+- Underlying functionality of the actual Pokedex
+- All of the good stuff
