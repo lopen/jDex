@@ -85,13 +85,4 @@ public class Parser {
         public HashMap<Long, Pokemon> getAllPokemon() {
                 return allPokemon;
         }
-
-        /**
-         * Main method, will be removed
-         * @param args
-         */
-        public static void main(String[] args) {
-                Parser p = new Parser();
-                System.out.println(p.getAllPokemon().get(151L).getName());
-        }
 }
