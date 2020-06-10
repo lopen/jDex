@@ -1,6 +1,10 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Frame extends JFrame{
 
@@ -8,28 +12,29 @@ public class Frame extends JFrame{
     private JPanel navbar;
     private JPanel infoBox;
     private Dex dex;
+    private Icon pokeIcon;
 
-    public Frame(){
+    public Frame() throws IOException {
         super("Pokedex");
         dex = new Dex();
         makeFrame();
     }
 
-    public void makeFrame() {
+    public void makeFrame() throws IOException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(400, 400);
         setResizable(false);
 
         // making the navbar
         navbar = new JPanel();
-        navbar.setSize(600, 50);
-        navbar.setBackground(Color.BLUE);
+        navbar.setSize(400, 50);
+        //navbar.setBackground(Color.BLUE);
 
         // making the info box
         infoBox = new JPanel();
-        infoBox.setSize(600,350);
-        infoBox.setBackground(Color.RED);
-        infoBox.setLayout(new GridLayout());
+        infoBox.setSize(400,350);
+        //infoBox.setBackground(Color.RED);
+        infoBox.setLayout(new GridLayout(2, 2));
 
         // navbar content
         JButton prevBtn = new JButton("Previous");
@@ -40,25 +45,39 @@ public class Frame extends JFrame{
         // need to add sprite labels of the next and previous pokemon
 
         // info box content
-        // current pokemon name and number
-        // pokemon picture, large
-        // stats
-        JLabel englishName = currentPkmn;
-        JLabel otherNames = new JLabel(dex.getCurrentPokemon().allNamesToString());
+        JLabel pokeImg = new JLabel();
+        pokeImg.setIcon(setPokeImg());
+        JLabel id = new JLabel(dex.getCurrentPokemon().idToString());
+        JLabel names = new JLabel(dex.getCurrentPokemon().allNames());
+        JLabel baseStats = new JLabel(dex.getCurrentPokemon().allStats());
 
         // previous and next button action listeners
         prevBtn.addActionListener(l -> {
             if (dex.getCurrentLong() != 1L) {
                 dex.setCurrentPokemon(dex.getCurrentLong() - 1L);
                 currentPkmn.setText(dex.getCurrentPokemon().getName());
-                otherNames.setText(dex.getCurrentPokemon().allNamesToString());
+                try {
+                    pokeImg.setIcon(setPokeImg());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                id.setText(dex.getCurrentPokemon().idToString());
+                names.setText(dex.getCurrentPokemon().allNames());
+                baseStats.setText(dex.getCurrentPokemon().allStats());
             }
         });
         nextBtn.addActionListener(l -> {
             if (!(dex.getCurrentLong() == (dex.getAllPokemon().size() - 1L))) {
                 dex.setCurrentPokemon(dex.getCurrentLong() + 1L);
                 currentPkmn.setText(dex.getCurrentPokemon().getName());
-                otherNames.setText(dex.getCurrentPokemon().allNamesToString());
+                try {
+                    pokeImg.setIcon(setPokeImg());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                id.setText(dex.getCurrentPokemon().idToString());
+                names.setText(dex.getCurrentPokemon().allNames());
+                baseStats.setText(dex.getCurrentPokemon().allStats());
             }
         });
 
@@ -70,8 +89,10 @@ public class Frame extends JFrame{
         navbar.add(nextBtn);
 
         // adding content to infobox
-
-        infoBox.add(otherNames);
+        infoBox.add(pokeImg);
+        infoBox.add(id);
+        infoBox.add(names);
+        infoBox.add(baseStats);
 
         // adding content to frame
         add(navbar);
@@ -79,5 +100,12 @@ public class Frame extends JFrame{
 
 
         setVisible(true);
+    }
+
+    public Icon setPokeImg() throws IOException {
+        String workingDir = System.getProperty("user.dir");
+        BufferedImage mainPic = ImageIO.read(new File(workingDir + "\\src\\main\\java\\thumbnails\\" + dex.getCurrentPokemon().getImageId() + ".png"));
+        pokeIcon = new ImageIcon(mainPic);
+        return pokeIcon;
     }
 }
