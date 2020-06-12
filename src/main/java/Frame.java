@@ -41,8 +41,10 @@ public class Frame extends JFrame{
         prevBtn.setSize(50,50);
         JButton nextBtn = new JButton("Next");
         nextBtn.setSize(50,50);
+        JLabel pokeIcon = new JLabel();
+        pokeIcon.setIcon(setPokeIcon());
         JLabel currentPkmn = new JLabel(dex.getCurrentPokemon().getName());
-        // need to add sprite labels of the next and previous pokemon
+        // add search function
 
         // info box content
         JLabel pokeImg = new JLabel();
@@ -57,6 +59,7 @@ public class Frame extends JFrame{
                 dex.setCurrentPokemon(dex.getCurrentLong() - 1L);
                 currentPkmn.setText(dex.getCurrentPokemon().getName());
                 try {
+                    pokeIcon.setIcon(setPokeIcon());
                     pokeImg.setIcon(setPokeImg());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -71,6 +74,7 @@ public class Frame extends JFrame{
                 dex.setCurrentPokemon(dex.getCurrentLong() + 1L);
                 currentPkmn.setText(dex.getCurrentPokemon().getName());
                 try {
+                    pokeIcon.setIcon(setPokeIcon());
                     pokeImg.setIcon(setPokeImg());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -85,6 +89,7 @@ public class Frame extends JFrame{
 
         // adding content to navbar
         navbar.add(prevBtn);
+        navbar.add(pokeIcon);
         navbar.add(currentPkmn);
         navbar.add(nextBtn);
 
@@ -97,14 +102,20 @@ public class Frame extends JFrame{
         // adding content to frame
         add(navbar);
         add(infoBox);
-
-
+        
         setVisible(true);
     }
 
     public Icon setPokeImg() throws IOException {
         String workingDir = System.getProperty("user.dir");
         BufferedImage mainPic = ImageIO.read(new File(workingDir + "\\src\\main\\java\\thumbnails\\" + dex.getCurrentPokemon().getImageId() + ".png"));
+        pokeIcon = new ImageIcon(mainPic);
+        return pokeIcon;
+    }
+
+    public Icon setPokeIcon() throws IOException {
+        String workingDir = System.getProperty("user.dir");
+        BufferedImage mainPic = ImageIO.read(new File(workingDir + "\\src\\main\\java\\sprites\\" + dex.getCurrentPokemon().getIconId() + ".png"));
         pokeIcon = new ImageIcon(mainPic);
         return pokeIcon;
     }

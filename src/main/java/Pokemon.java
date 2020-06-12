@@ -50,7 +50,7 @@ public class Pokemon {
         String chi = "Chinese: " + getNames()[2];
         String fre = "French: " + getNames()[3];
 
-        return "<html><body>" + eng + "<br>" + jap + "<br>" + chi + "<br>" + fre + "</body></html>";
+        return "<html><body>Names:<br>" + eng + "<br>" + jap + "<br>" + chi + "<br>" + fre + "</body></html>";
     }
 
     public String allStats() {
@@ -61,7 +61,7 @@ public class Pokemon {
         String spdef = "Sp. Defense: " + getBase()[4];
         String speed = "Speed: " + getBase()[5];
 
-        return "<html><body>" + hp + "<br>" + att + "<br>" + def + "<br>" + spatt + "<br>" + spdef + "<br>" + speed + "</body></html>";
+        return "<html><body>Base stats:<br>" + hp + "<br>" + att + "<br>" + def + "<br>" + spatt + "<br>" + spdef + "<br>" + speed + "</body></html>";
     }
 
     public String getImageId() {
@@ -71,6 +71,16 @@ public class Pokemon {
             return "0" + getId();
         } else {
             return "" + getId();
+        }
+    }
+
+    public String getIconId() {
+        if ((getId() + "").length() == 1) {
+            return "00" + getId() + "MS";
+        } else if ((getId() + "").length() == 2) {
+            return "0" + getId()+ "MS";
+        } else {
+            return "" + getId()+ "MS";
         }
     }
 }
