@@ -11,6 +11,7 @@ public class Frame extends JFrame{
     // Fields for main panels in frame
     private JPanel navbar;
     private JPanel infoBox;
+    private JPanel searchbar;
     private Dex dex;
     private Icon pokeIcon;
 
@@ -24,6 +25,8 @@ public class Frame extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 400);
         setResizable(false);
+        Container container = getContentPane();
+        setLayout(new FlowLayout());
 
         // making the navbar
         navbar = new JPanel();
@@ -32,9 +35,13 @@ public class Frame extends JFrame{
 
         // making the info box
         infoBox = new JPanel();
-        infoBox.setSize(400,350);
+        infoBox.setSize(400,300);
         //infoBox.setBackground(Color.RED);
-        infoBox.setLayout(new GridLayout(2, 2));
+        infoBox.setLayout(new GridLayout(2, 2,5,5));
+
+        // making the searchbar
+        searchbar = new JPanel();
+        searchbar.setSize(400,50);
 
         // navbar content
         JButton prevBtn = new JButton("Previous");
@@ -44,7 +51,6 @@ public class Frame extends JFrame{
         JLabel pokeIcon = new JLabel();
         pokeIcon.setIcon(setPokeIcon());
         JLabel currentPkmn = new JLabel(dex.getCurrentPokemon().getName());
-        // add search function
 
         // info box content
         JLabel pokeImg = new JLabel();
@@ -52,6 +58,13 @@ public class Frame extends JFrame{
         JLabel id = new JLabel(dex.getCurrentPokemon().idToString());
         JLabel names = new JLabel(dex.getCurrentPokemon().allNames());
         JLabel baseStats = new JLabel(dex.getCurrentPokemon().allStats());
+
+        // searchbar content
+        JLabel enterLabel = new JLabel("Enter an ID:");
+        JTextField searchField = new JTextField("");
+        searchField.setColumns(10);
+        JButton searchBtn = new JButton("Search");
+        searchBtn.setSize(100,50);
 
         // previous and next button action listeners
         prevBtn.addActionListener(l -> {
@@ -67,6 +80,7 @@ public class Frame extends JFrame{
                 id.setText(dex.getCurrentPokemon().idToString());
                 names.setText(dex.getCurrentPokemon().allNames());
                 baseStats.setText(dex.getCurrentPokemon().allStats());
+                searchField.setText("");
             }
         });
         nextBtn.addActionListener(l -> {
@@ -82,10 +96,28 @@ public class Frame extends JFrame{
                 id.setText(dex.getCurrentPokemon().idToString());
                 names.setText(dex.getCurrentPokemon().allNames());
                 baseStats.setText(dex.getCurrentPokemon().allStats());
+                searchField.setText("");
             }
         });
 
-
+        // searchBtn action listener
+        searchBtn.addActionListener(l -> {
+            Long searchedId = Long.parseLong(searchField.getText().replace(" ", ""));
+            if (searchedId < dex.getAllPokemon().size() && searchedId > 0L) {
+                dex.setCurrentPokemon(searchedId);
+                currentPkmn.setText(dex.getCurrentPokemon().getName());
+                try {
+                    pokeIcon.setIcon(setPokeIcon());
+                    pokeImg.setIcon(setPokeImg());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                id.setText(dex.getCurrentPokemon().idToString());
+                names.setText(dex.getCurrentPokemon().allNames());
+                baseStats.setText(dex.getCurrentPokemon().allStats());
+                searchField.setText("");
+            }
+        });
 
         // adding content to navbar
         navbar.add(prevBtn);
@@ -99,9 +131,17 @@ public class Frame extends JFrame{
         infoBox.add(names);
         infoBox.add(baseStats);
 
+        // adding content to searchbar
+        searchbar.add(enterLabel);
+        searchbar.add(searchField);
+        searchbar.add(searchBtn);
+
         // adding content to frame
-        add(navbar);
-        add(infoBox);
+        container.add(navbar);
+        container.add(Box.createHorizontalStrut(2000));
+        container.add(infoBox);
+        container.add(Box.createHorizontalStrut(2000));
+        container.add(searchbar);
         
         setVisible(true);
     }
