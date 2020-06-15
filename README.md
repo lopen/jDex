@@ -8,10 +8,6 @@ Check out the progress so far (video): [jDex](http://trygveulsnes.com/img/jDex-s
 ---------
 
 Currently work in progress\
-Things that doing: 
-- GUI
- - Fixing the buttons and top name disappearing
- - Formatting
-- Underlying functionality of the actual Pokedex
-  - Adding a search function
+Things that need doing: 
+- Add functionality in the form of items, moves or separate by generation etc.
 - All of the good stuff
